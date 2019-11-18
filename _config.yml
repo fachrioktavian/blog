@@ -1,8 +1,8 @@
 # Site settings
 title: "fokt"
 bye_message: "Thx!"
-baseurl: "/blog/"
-url: "https://fachrioktavian.github.io"
+baseurl: "/blog"
+url: "https://fachrioktavian.github.io/"
 #disqus: fokt
 disqus:
     # Leave shortname blank to disable comments site-wide.

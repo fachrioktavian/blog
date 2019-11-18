@@ -33,7 +33,7 @@ Untuk membuat lab research, beberapa tool yang saya gunakan antara lain:
 
 Buka tool immunity debugger dan jalankan program dvca_bof.exe
 
-![dvca_bof.exe]({{ site.baseurl }}images/posts/2018/p1_1.png "dvca_bof.exe dijalankan oleh immunity debugger"){:width="600"}
+![dvca_bof.exe]({{ site.baseurl }}/images/posts/2018/p1_1.png "dvca_bof.exe dijalankan oleh immunity debugger"){:width="600"}
 
 ### Membuat program crash
 
@@ -60,7 +60,7 @@ kirim(p, evil)
 
 Jalankan script dan lihat pada debugger.
 
-![dvca_bof.exe crash]({{ site.baseurl }}images/posts/2018/p1_2.png "dvca_bof.exe crash"){:width="600"}
+![dvca_bof.exe crash]({{ site.baseurl }}/images/posts/2018/p1_2.png "dvca_bof.exe crash"){:width="600"}
 
 Kita lihat register EIP berisikan data `0x41414141` yaitu representasi dari karakter `AAAA` di dalam memori. EIP adalah instruction pointer, sebuah register yang menyimpan alamat dari memori yang akan dieksekusi operation code-nya. Program crash karena pada memori tidak ditemukan alamat 0x41414141.
 
@@ -91,11 +91,11 @@ kirim(p, evil)
 
 Jalankan script dan cek debugger
 
-![EIP]({{ site.baseurl }}images/posts/2018/p1_3.png "EIP terisi dengan pattern"){:width="600"}
+![EIP]({{ site.baseurl }}/images/posts/2018/p1_3.png "EIP terisi dengan pattern"){:width="600"}
 
 Menggunakan mona, kita bisa men-track dan menemukan offset yang meng-overwrite EIP `!mona findmsp`
 
-![mona]({{ site.baseurl }}images/posts/2018/p1_4.png "!mona findmsp"){:width="600"}
+![mona]({{ site.baseurl }}/images/posts/2018/p1_4.png "!mona findmsp"){:width="600"}
 
 Offset EIP berada setelah 1012 byte junk. Kita bisa menyusun payload menjadi `evil = "A"*1012 +  "BBBB"` dimana `BBBB` adalah `alamat dari sesuatu`.
 
@@ -103,7 +103,7 @@ Pertanyaannya adalah alamat apa yang harus kita letakkan untuk mengganti karakte
 
 Ketik `!mona jmp -r esp` pada konsol debugger.
 
-![mona jmp]({{ site.baseurl }}images/posts/2018/p1_5.png "!mona jmp -r esp"){:width="600"}
+![mona jmp]({{ site.baseurl }}/images/posts/2018/p1_5.png "!mona jmp -r esp"){:width="600"}
 
 Kita menemukan sebuah alamat berisikan opcode yang kita inginkan. Alamat tersebut berada pada `0x133712f0` (lihat gambar). Ingat bahwa Intel x86 Assembly itu sistem berbasis little endian sehingga agar saat masuk kedalam memori alamat tidak terbalik, pada script kita harus membaliknya menjadi `\xf0\x12\x37\x13`. Dan terimakasih untuk pwntools yang telah menyediakan fungsi untuk meng-handle masalah tersebut, `p32()`.
 
@@ -216,11 +216,11 @@ kirim(p, evil)
 
 `\x90` adalah opcode dari NOP, artinya No Operation sampai menemukan opcode lain. Setelah menyusun script exploit meaning No Operation until find other opcode. Setelah exploit selesai, jalankan msfconsole.
 
-![msfconsole]({{ site.baseurl }}images/posts/2018/p1_6.png "msfconsole"){:width="600"}
+![msfconsole]({{ site.baseurl }}/images/posts/2018/p1_6.png "msfconsole"){:width="600"}
 
 Jalankan script eksploit dan kita mendapatkan shell.
 
-![shell]({{ site.baseurl }}images/posts/2018/p1_7.png "shell"){:width="600"}
+![shell]({{ site.baseurl }}/images/posts/2018/p1_7.png "shell"){:width="600"}
 
 ### Metasploit module
 
@@ -232,4 +232,4 @@ Letakkan script tersebut pada direktori `$MSF_PATH/embedded/framework/modules/ex
 
 Dan gunakan modul tersebut pada metasploit
 
-![msfconsole]({{ site.baseurl }}images/posts/2018/p1_8.png "modul exploit msfconsole")
+![msfconsole]({{ site.baseurl }}/images/posts/2018/p1_8.png "modul exploit msfconsole")

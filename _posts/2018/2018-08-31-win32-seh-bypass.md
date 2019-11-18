@@ -30,7 +30,7 @@ Tools yang akan kita gunakan untuk keperluan tutorial ini sama seperti pada [art
 
 Buka tool immunity debugger dan jalankan program dvca_bof.exe
 
-![dvca_seh.exe]({{ site.baseurl }}images/posts/2018/p2_1.png "dvca_seh.exe dijalankan oleh immunity debugger"){:width="600"}
+![dvca_seh.exe]({{ site.baseurl }}/images/posts/2018/p2_1.png "dvca_seh.exe dijalankan oleh immunity debugger"){:width="600"}
 
 ### Membuat program crash
 
@@ -59,12 +59,12 @@ kirim(p, evil)
 
 Jalankan script dan lihat pada debugger.
 
-![dvca_seh.exe crash]({{ site.baseurl }}images/posts/2018/p2_2.png "dvca_seh.exe crash"){:width="600"}
+![dvca_seh.exe crash]({{ site.baseurl }}/images/posts/2018/p2_2.png "dvca_seh.exe crash"){:width="600"}
 
 Jika dilihat pada bagian register EIP tidak tertimpa oleh karater `AAAA` sama sekali, namun program crash. Hal tersebut dikarenakan Exception Handler. Pada akhir stack program, compiler meletakkan dua pointer yaitu `nSEH` dan `SEH`. Pointer SEH adalah pointer yang mengarah ke routines untuk menghandle ketika error exception terdeteksi oleh program (dalam kasus ini adalah error overflow), sedangkan nSEH adalah pointer yang mengarah ke `next SEH` atau Exception handler selanjutnya apabila routines pada pointer SEH tidak dapat meng-handle-nya.
 Jika Anda perhatikan nSEH dan SEH ini akan membentuk sebuah struktur linked-list yang dinamakan `SEH chain`, gambarannya adalah sebagai berikut:
 
-![SEH chain]({{ site.baseurl }}images/posts/2018/p2_3.jpg "SEH chain"){:width="300"}
+![SEH chain]({{ site.baseurl }}/images/posts/2018/p2_3.jpg "SEH chain"){:width="300"}
 
 Pada immunity debugger, untuk melihat SEH chain dapat memilih menu `view -> SEH chain`. Pada gambar tracing debugger di atas, terlihat SE Handler mengarah ke address `0x41414141` yang tidak terdapat pada region virtual address manapun pada memory yang artinya kita berhasil mengoverflow 4 bit address SEH. Sampai sini kita dapat mengambil simpulan bahwa yang dapat dikontrol bukanlah register EIP melainkan 4 bit nSEH dan 4 bit SEH. Jadi, bagaimana kita mengubah alur program dengan hanya dapat mengontrol 8 bit pointer tersebut?
 
@@ -72,7 +72,7 @@ Pada immunity debugger, untuk melihat SEH chain dapat memilih menu `view -> SEH 
 
 Kita dapat mem-bypass alur exception ini dengan cara meng-overwrite 4 bit nSEH dengan `operation code yang mengarahkan program ke shellcode` kemudian meng-overwrite 4 bit SEH dengan block code dimana terdapat perintah `POP; POP; RET (PPR)` di dalamnya. Penjelasannya adalah sebagai berikut:
 
-![SEH bypass]({{ site.baseurl }}images/posts/2018/p2_4.jpg "SEH bypass"){:width="450"}
+![SEH bypass]({{ site.baseurl }}/images/posts/2018/p2_4.jpg "SEH bypass"){:width="450"}
 
 1. Ketika overflow terjadi, error access violation akan muncul dan men-trigger exception handler, dengan begitu alur program akan mengarah ke address yang berada di SEH dalam case kali ini berisikan address dari block code PPR
 
@@ -84,7 +84,7 @@ Mengapa kita tidak menggunakan `jmp esp` untuk mengganti PPR sehingga alur progr
 
 Sebelum kita melakukan exploitasi SEH, kita harus menemukan offset yang tepat dari pointer nSEH dan SEH. Caranya masih sama seperti pada artikel pertama yaitu menggunakan msf pattern dan `!mona findmsp`
 
-![!mona findmsp]({{ site.baseurl }}images/posts/2018/p2_5.png "!mona findmsp"){:width="600"}
+![!mona findmsp]({{ site.baseurl }}/images/posts/2018/p2_5.png "!mona findmsp"){:width="600"}
 
 Terlihat SEH record yang dimulai dari nSEH terdapat pada offset 1104 dan pasti diikuti oleh SEH pada offset 1108. 
 
@@ -92,7 +92,7 @@ Terlihat SEH record yang dimulai dari nSEH terdapat pada offset 1104 dan pasti d
 
 Anda tidak perlu pusing mencari PPR, mona secara otomoatis akan mencari gadget PPR di dalam region memori binary maupun dll. cukup menggunakan peritah `!mona seh`
 
-![!mona seh]({{ site.baseurl }}images/posts/2018/p2_6.png "!mona seh"){:width="600"}
+![!mona seh]({{ site.baseurl }}/images/posts/2018/p2_6.png "!mona seh"){:width="600"}
 
 Banyak gadget PPR dari dvca_sehlib.dll menunjukkan bahwa address ini akan selalu sama ketika dijalankan di komputer lain, sehingga exploit kita menjadi portable. Pada case kali ini saya menggunakan PPR pada address `0x19196530`
 
@@ -100,11 +100,11 @@ Banyak gadget PPR dari dvca_sehlib.dll menunjukkan bahwa address ini akan selalu
 
 Untuk mencari opcode dari `jmp <address>`, Anda dapat menggunakan debugger untuk live edit instruksi assembly ketika program berjalan. Pertama-tama buat script python seperti sebelumnya dengan mengubah value variabel evil menjadi `evil = "A"*1104 + "\xCC"*4 + p32(ppr)` dengan `ppr = 0x19196530` lalu jalankan script tersebut.
 
-![int3]({{ site.baseurl }}images/posts/2018/p2_7.png "int3"){:width="450"}
+![int3]({{ site.baseurl }}/images/posts/2018/p2_7.png "int3"){:width="450"}
 
 Program akan berhenti pada instruksi `\xCC` atau program interrupt (int3), hal ini akan memudahkan kita untuk melakukan breakpoint. Selanjutnya edit opcode INT3 menjadi instruksi `jmp <address>` dengan <address> adalah alamat shellcode atau alamat setelah SEH dimana kita akan menempatkan shellcode disana. Pada case ini saya akan melakukan `jmp 0x0145FF1B`
 
-![jmp short]({{ site.baseurl }}images/posts/2018/p2_8.png "jmp short"){:width="600"}
+![jmp short]({{ site.baseurl }}/images/posts/2018/p2_8.png "jmp short"){:width="600"}
 
 Kita dapatkan opcode nya yaitu `EB 0D`. INT3 yang lain dapat diganti dengan NOP sehingga opcode 4 bit menjadi `jfront = 0x90900deb` dan kita perlu meletakkan setidaknya 6 bit NOP sebelum shellcode agar shellcode tereksekusi sempurna.
 
@@ -167,7 +167,7 @@ kirim(p, evil)
 
 Buka msfconsole lalu buat handler untuk menangkap reverse shell, jalankan script exploit final dan pwn!
 
-![pwn]({{ site.baseurl }}images/posts/2018/p2_9.png "pwn"){:width="600"}
+![pwn]({{ site.baseurl }}/images/posts/2018/p2_9.png "pwn"){:width="600"}
 
 ### Metasploit module
 
@@ -175,4 +175,4 @@ Seperti pada artikel sebelumnya, exploit dalam bentuk script python dapat diubah
 
 Setelah di-copy ke direktori module DVCA, maka Anda dapat menggunakannya di msfconsole
 
-![msfconsole]({{ site.baseurl }}images/posts/2018/p2_10.png "msfconsole exploit module"){:width="600"}
+![msfconsole]({{ site.baseurl }}/images/posts/2018/p2_10.png "msfconsole exploit module"){:width="600"}
