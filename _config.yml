@@ -1,7 +1,7 @@
 # Site settings
 title: "fokt"
 bye_message: "Thx!"
-baseurl: "/"
+baseurl: "/blog/"
 url: "https://fachrioktavian.github.io"
 #disqus: fokt
 disqus:
