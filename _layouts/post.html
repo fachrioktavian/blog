@@ -1,5 +1,6 @@
 ---
 layout: page
+comments: true
 ---
 
 <div class="post">
@@ -11,17 +12,18 @@ layout: page
         {% if page.meta %} • {{ page.meta }}{% endif %}
         •
         {% for category in page.tags %}<span><a href="{{ site.baseurl }}category/#{{ category }}" class="reserved">{{ category }}</a>{% if forloop.last != true %},{% endif %}</span>{% endfor %}
-    </p>
+        •
+        <a href="{{ content.absolute_url }}#disqus_thread">Post a comment</a>
+      </p>
   </header>
 
   <article class="post-content">
   {{ content }}
   </article>
 
-	<p class="feed-recomendation">
-		Gostou do post? Assina o <a href="{{ site.baseurl }}feed/">feed</a> e seja feliz!!
-	</p>
+  {% if site.disqus.shortname %}
+    {% include disqus_comments.html %}
+  {% endif %}
 
-  {% include disqus.html %}
 
 </div>
