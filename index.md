@@ -2,5 +2,5 @@
 layout: content
 ---
 
-# About
+> About
 To do
