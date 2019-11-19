@@ -2,5 +2,6 @@
 layout: content
 ---
 
-> About
-To do
+# Init
+
+Personal blog for my research and CTF (Capture The Flag) stuff.

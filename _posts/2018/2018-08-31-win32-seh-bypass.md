@@ -8,8 +8,6 @@ tags:
     - windows
     - x86
     - stack buffer overflow
-short_description: Mengenal SEH dan cara exploitasinya
-image_preview: https://media.giphy.com/media/eCqFYAVjjDksg/giphy.gif
 ---
 
 Kali ini saya akan membahas tentang sebuah mekanisme proteksi yang dapat menghalangi attacker saat ingin mengontrol register EIP ketika sudah dapat meng-overflow buffer. Mekanisme tersebut adalah Structured Exception Handler (SEH).
