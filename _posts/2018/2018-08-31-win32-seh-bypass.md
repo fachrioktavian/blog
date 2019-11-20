@@ -3,7 +3,7 @@ layout: post
 title: Win32 SEH bypass
 date: 2018-08-31 02:38:50
 categories: 
-    - blog
+    - research
 tags:
     - windows
     - x86

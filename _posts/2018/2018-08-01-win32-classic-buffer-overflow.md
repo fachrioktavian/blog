@@ -3,7 +3,7 @@ layout: post
 title: "Win32 classic buffer overflow"
 date: 2018-08-01 02:38:50
 categories: 
-    - blog
+    - research
 tags:
     - windows
     - x86

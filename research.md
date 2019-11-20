@@ -1,11 +1,15 @@
 ---
 layout: blog
-title: "Blog Posts"
-permalink: /blog
+title: "Research Posts"
+permalink: /research
 ---
 
+<header>
+    <h1>{{page.title}}</h1>
+</header>
+
 <ul class="posts">
-    {% for post in site.categories.blog %}
+    {% for post in site.categories.research %}
         <li>
             <span class="post-date">{{ post.date | date: "%b %d, %Y" }}</span>
             ::

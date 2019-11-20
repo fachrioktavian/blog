@@ -3,7 +3,7 @@ layout: post
 title: pwn2win19 - random vault
 date: 2019-11-19 00:00:00
 categories: 
-    - blog
+    - ctf
 tags:
     - ctf
     - linux
