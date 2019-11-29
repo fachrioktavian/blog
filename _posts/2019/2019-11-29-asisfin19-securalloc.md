@@ -1,6 +1,6 @@
 ---
 layout: post
-title: asisfin19 - random vault
+title: asisfin19 - securalloc
 date: 2019-11-29 00:00:00
 categories: 
     - ctf
