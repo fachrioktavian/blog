@@ -1,6 +1,6 @@
 ---
 layout: post
-title: pwn2win19 - random vault
+title: Pwn2win CTF 2019 - Random Vault
 date: 2019-11-19 00:00:00
 categories: 
     - ctf

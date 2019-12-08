@@ -1,6 +1,6 @@
 ---
 layout: post
-title: pwn2win19 - full troll
+title: Pwn2win CTF 2019 - Full Troll
 date: 2019-11-20 00:00:00
 categories: 
     - ctf
@@ -95,7 +95,7 @@ Binary' protection:
     }
     ```
 
-#### Exploitation's Scenario
+#### Exploitation's scenario
 
 1. Reverse engineering program to get password value that it wants
 

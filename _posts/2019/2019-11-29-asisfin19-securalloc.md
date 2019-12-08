@@ -1,6 +1,6 @@
 ---
 layout: post
-title: asisfin19 - securalloc
+title: Asis CTF Final 2019 - Securalloc
 date: 2019-11-29 00:00:00
 categories: 
     - ctf
