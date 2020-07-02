@@ -7,8 +7,8 @@ categories:
 tags:
     - ctf
     - linux
-    - x32
-    - Stack buffer overflow
+    - x86
+    - stack buffer overflow
     - ret2dl_resolve
     - binary exploitation
 ---
